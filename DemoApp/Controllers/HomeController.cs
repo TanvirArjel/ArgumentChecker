@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using DemoApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using TanvirArjel.ArgumentChecker;
 
 namespace DemoApp.Controllers
 {
@@ -18,8 +16,10 @@ namespace DemoApp.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(Guid? input)
         {
+            input = Guid.Empty;
+            input.ThrowIfNullOrEmpty(nameof(input));
             return View();
         }
 

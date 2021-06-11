@@ -1,7 +1,47 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageId>TanvirArjel.ArgumentChecker</PackageId>
+		<Title>TanvirArjel.ArgumentChecker</Title>
+		<Company>Tanvir Ahmad Arjel</Company>
+		<Authors>TanvirArjel</Authors>
+		<Description>This package can be used to check method parameters' values and throw appropriate exceptions to avoid confusing NullReferenceException in any C#, .NET application.</Description>
+		<Summary>This package can be used to check method parameters' values and throw appropriate exceptions to avoid confusing NullReferenceException in any C#, .NET application.</Summary>
+		<Copyright>©2021 TanvirArjel. All rights reserved.</Copyright>
+		<PackageProjectUrl>https://github.com/TanvirArjel/ArgumentChecker</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/TanvirArjel/ArgumentChecker</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<PackageReleaseNotes>1. This is the initial release of this library.</PackageReleaseNotes>
+		<PackageTags>C#, .NET, ArgumentGuard, ParamterGuard,ArgumentChecker,ParameterChecker</PackageTags>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageIconUrl />
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AdditionalFiles Include="stylecop.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
+	    <PrivateAssets>all</PrivateAssets>
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\LICENSE">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	  <None Include="icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath></PackagePath>
+	  </None>
+	</ItemGroup>
 
 </Project>

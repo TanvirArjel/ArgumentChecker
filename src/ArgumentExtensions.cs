@@ -1,11 +1,27 @@
-﻿using System;
+﻿// <copyright file="ArgumentExtensions.cs" company="TanvirArjel">
+// Copyright (c) TanvirArjel. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace TanvirArjel.ArgumentChecker
 {
+    /// <summary>
+    /// Contains all the extension methods to check different argument types and throw appropriate exception.
+    /// </summary>
     public static class ArgumentExtensions
     {
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
         public static T ThrowIfNull<T>([ValidatedNotNull] this T value, string paramName, string message = null)
             where T : class
         {
@@ -22,105 +38,16 @@ namespace TanvirArjel.ArgumentChecker
             return value;
         }
 
-        public static T ThrowIfNull<T>(this T? value, string paramName, string message = null)
-            where T : struct
-        {
-            if (value is null)
-            {
-                if (string.IsNullOrWhiteSpace(message))
-                {
-                    throw new ArgumentNullException(paramName);
-                }
-
-                throw new ArgumentNullException(paramName, message);
-            }
-
-            return value.Value;
-        }
-
-        public static int ThrowIfZeroOrNegative(this int value, string paramName, string message = null)
-        {
-            return ThrowIfZeroOrNegative<int>(value, paramName, message);
-        }
-
-        public static long ThrowIfZeroOrNegative(this long value, string paramName, string message = null)
-        {
-            return ThrowIfZeroOrNegative<long>(value, paramName, message);
-        }
-
-        public static float ThrowIfZeroOrNegative(this float value, string paramName, string message = null)
-        {
-            return ThrowIfZeroOrNegative<float>(value, paramName, message);
-        }
-
-        public static double ThrowIfZeroOrNegative(this double value, string paramName, string message = null)
-        {
-            return ThrowIfZeroOrNegative<double>(value, paramName, message);
-        }
-
-        public static decimal ThrowIfZeroOrNegative(this decimal value, string paramName, string message = null)
-        {
-            return ThrowIfZeroOrNegative<decimal>(value, paramName, message);
-        }
-
-
-        private static T ThrowIfZeroOrNegative<T>(T value, string paramName, string message = null)
-            where T : struct, IComparable
-        {
-            if (value.CompareTo(default(T)) <= 0)
-            {
-                if (string.IsNullOrWhiteSpace(message))
-                {
-                    throw new ArgumentOutOfRangeException(paramName, "The value cannot be zero or negative.");
-                }
-
-                throw new ArgumentOutOfRangeException(paramName, message);
-            }
-
-            return value;
-        }
-
-        public static int ThrowIfOutOfRange(this int value, int min, int max, string paramName, string message = null)
-        {
-            return ThrowIfOutOfRange<int>(value, min, max, paramName, message);
-        }
-
-        public static long ThrowIfOutOfRange(this long value, long min, long max, string paramName, string message = null)
-        {
-            return ThrowIfOutOfRange<long>(value, min, max, paramName, message);
-        }
-
-        public static float ThrowIfOutOfRange(this float value, float min, float max, string paramName, string message = null)
-        {
-            return ThrowIfOutOfRange<float>(value, min, max, paramName, message);
-        }
-
-        public static double ThrowIfOutOfRange(this double value, double min, double max, string paramName, string message = null)
-        {
-            return ThrowIfOutOfRange<double>(value, min, max, paramName, message);
-        }
-
-        public static decimal ThrowIfOutOfRange(this decimal value, decimal min, decimal max, string paramName, string message = null)
-        {
-            return ThrowIfOutOfRange<decimal>(value, min, max, paramName, message);
-        }
-
-        private static T ThrowIfOutOfRange<T>(T value, T min, T max, string paramName, string message = null)
-            where T : struct, IComparable
-        {
-            if (value.CompareTo(default(T)) < min.CompareTo(default(T)) || value.CompareTo(default(T)) > max.CompareTo(default(T)))
-            {
-                if (string.IsNullOrWhiteSpace(message))
-                {
-                    throw new ArgumentOutOfRangeException(paramName, $"The value must be in between {min} and {max}.");
-                }
-
-                throw new ArgumentOutOfRangeException(paramName, message);
-            }
-
-            return value;
-        }
-
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/> and
+        /// <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
         public static string ThrowIfNullOrEmpty(this string value, string paramName, string message = null)
         {
             value.ThrowIfNull(paramName, message);
@@ -138,6 +65,91 @@ namespace TanvirArjel.ArgumentChecker
             return value;
         }
 
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="collection"/> is <see langword="null"/>.
+        /// </summary>
+        /// <typeparam name="T">The tuype of the item of the collection.</typeparam>
+        /// <param name="collection">The collection to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="collection"/> is <see langword="null"/>.</exception>
+        public static IEnumerable<T> ThrowIfNull<T>([ValidatedNotNull] this IEnumerable<T> collection, string paramName, string message = null)
+        {
+            if (collection == null)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentNullException(paramName);
+                }
+
+                throw new ArgumentNullException(paramName, message);
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="collection"/> is <see langword="null"/> and
+        /// <see cref="ArgumentException"/> if the <paramref name="collection"/> is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of the item of the collection.</typeparam>
+        /// <param name="collection">The collection to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="collection"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="collection"/> is empty.</exception>
+        public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull] this IEnumerable<T> collection, string paramName, string message = null)
+        {
+            collection.ThrowIfNull(paramName, message);
+
+            if (!collection.Any())
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentException("The collection is empty.", paramName);
+                }
+
+                throw new ArgumentException(message, paramName);
+            }
+
+            return collection;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        public static T ThrowIfNull<T>([ValidatedNotNull] this T? value, string paramName, string message = null)
+            where T : struct
+        {
+            if (value is null)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentNullException(paramName);
+                }
+
+                throw new ArgumentNullException(paramName, message);
+            }
+
+            return value.Value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
         public static Guid ThrowIfEmpty(this Guid value, string paramName, string message = null)
         {
             if (value == Guid.Empty)
@@ -153,43 +165,330 @@ namespace TanvirArjel.ArgumentChecker
             return value;
         }
 
-        public static Guid ThrowIfNullOrEmpty(this Guid? value, string paramName, string message = null)
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/> and
+        /// <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
+        public static Guid ThrowIfNullOrEmpty([ValidatedNotNull] this Guid? value, string paramName, string message = null)
         {
             value.ThrowIfNull(paramName, message);
             ((Guid)value).ThrowIfEmpty(paramName, message);
             return value.Value;
         }
 
-        public static IEnumerable<T> ThrowIfNull<T>(this IEnumerable<T> collection, string paramName, string message = null)
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
+        public static int ThrowIfZeroOrNegative(this int value, string paramName, string message = null)
         {
-            if (collection == null)
-            {
-                if (string.IsNullOrWhiteSpace(message))
-                {
-                    throw new ArgumentNullException(paramName);
-                }
-
-                throw new ArgumentNullException(paramName, message);
-            }
-
-            return collection;
+            return ThrowIfZeroOrNegative<int>(value, paramName, message);
         }
 
-        public static IEnumerable<T> ThrowIfNullOrEmpty<T>(this IEnumerable<T> collection, string paramName, string message = null)
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
+        public static long ThrowIfZeroOrNegative(this long value, string paramName, string message = null)
         {
-            collection.ThrowIfNull(paramName, message);
+            return ThrowIfZeroOrNegative<long>(value, paramName, message);
+        }
 
-            if (!collection.Any())
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
+        public static float ThrowIfZeroOrNegative(this float value, string paramName, string message = null)
+        {
+            return ThrowIfZeroOrNegative<float>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
+        public static double ThrowIfZeroOrNegative(this double value, string paramName, string message = null)
+        {
+            return ThrowIfZeroOrNegative<double>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
+        public static decimal ThrowIfZeroOrNegative(this decimal value, string paramName, string message = null)
+        {
+            return ThrowIfZeroOrNegative<decimal>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
+        public static int ThrowIfNegative(this int value, string paramName, string message = null)
+        {
+            return ThrowIfNegative<int>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
+        public static long ThrowIfNegative(this long value, string paramName, string message = null)
+        {
+            return ThrowIfNegative<long>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
+        public static float ThrowIfNegative(this float value, string paramName, string message = null)
+        {
+            return ThrowIfNegative<float>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
+        public static double ThrowIfNegative(this double value, string paramName, string message = null)
+        {
+            return ThrowIfNegative<double>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
+        public static decimal ThrowIfNegative(this decimal value, string paramName, string message = null)
+        {
+            return ThrowIfNegative<decimal>(value, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static int ThrowIfOutOfRange(this int value, int min, int max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<int>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static long ThrowIfOutOfRange(this long value, long min, long max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<long>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static float ThrowIfOutOfRange(this float value, float min, float max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<float>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static double ThrowIfOutOfRange(this double value, double min, double max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<double>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static decimal ThrowIfOutOfRange(this decimal value, decimal min, decimal max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<decimal>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static DateTime ThrowIfOutOfRange(this DateTime value, DateTime min, DateTime max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<DateTime>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        public static TimeSpan ThrowIfOutOfRange(this TimeSpan value, TimeSpan min, TimeSpan max, string paramName, string message = null)
+        {
+            return ThrowIfOutOfRange<TimeSpan>(value, min, max, paramName, message);
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
+        private static T ThrowIfZeroOrNegative<T>(T value, string paramName, string message = null)
+            where T : struct, IComparable
+        {
+            if (value.CompareTo(default(T)) <= 0)
             {
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                    throw new ArgumentException("The collection is empty.", paramName);
+                    throw new ArgumentOutOfRangeException(paramName, "The value cannot be zero or negative.");
                 }
 
-                throw new ArgumentException(message, paramName);
+                throw new ArgumentOutOfRangeException(paramName, message);
             }
 
-            return collection;
+            return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
+        private static T ThrowIfNegative<T>(T value, string paramName, string message = null)
+            where T : struct, IComparable
+        {
+            if (value.CompareTo(default(T)) < 0)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentOutOfRangeException(paramName, "The value cannot be negative.");
+                }
+
+                throw new ArgumentOutOfRangeException(paramName, message);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified range.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="min">The min value of the range.</param>
+        /// <param name="max">The max value of the range.</param>
+        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
+        private static T ThrowIfOutOfRange<T>(T value, T min, T max, string paramName, string message = null)
+            where T : struct, IComparable
+        {
+            if (value.CompareTo(min) < 0 || value.CompareTo(max) > 0)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentOutOfRangeException(paramName, $"The value must be in between {min} and {max}.");
+                }
+
+                throw new ArgumentOutOfRangeException(paramName, message);
+            }
+
+            return value;
         }
     }
 }

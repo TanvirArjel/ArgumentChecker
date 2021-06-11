@@ -1,10 +1,16 @@
-﻿using System;
+﻿// <copyright file="ValidatedNotNullAttribute.cs" company="TanvirArjel">
+// Copyright (c) TanvirArjel. All rights reserved.
+// </copyright>
+
+using System;
 
 namespace TanvirArjel.ArgumentChecker
 {
     /// <summary>
-    /// Add to methods that check input for null and throw if the input is null.
+    /// This empty attribute is used to remove compiler warning for reference type paramter.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
-    public sealed class ValidatedNotNullAttribute : Attribute { }
+    internal sealed class ValidatedNotNullAttribute : Attribute
+    {
+    }
 }
