@@ -48,7 +48,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
-        public static string ThrowIfNullOrEmpty(this string value, string paramName, string message = null)
+        public static string ThrowIfNullOrEmpty([ValidatedNotNull] this string value, string paramName, string message = null)
         {
             value.ThrowIfNull(paramName, message);
 
@@ -56,10 +56,47 @@ namespace TanvirArjel.ArgumentChecker
             {
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                    throw new ArgumentException("The value of paramter is empty", paramName);
+                    throw new ArgumentException("The value of paramter is empty.", paramName);
                 }
 
                 throw new ArgumentNullException(paramName, message);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is out of specified lengths.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="minLength">The minimum length of string.</param>
+        /// <param name="maxLength">The maximum length of the string.</param>
+        /// <param name="paramName">The name of the parameter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is empty.</exception>
+        public static string ThrowIfOutOfLength(
+            [ValidatedNotNull] this string value,
+            int minLength,
+            int maxLength,
+            string paramName,
+            string message = null)
+        {
+            value.ThrowIfNullOrEmpty(paramName, message);
+            minLength.ThrowIfZeroOrNegative(nameof(minLength));
+            maxLength.ThrowIfZeroOrNegative(nameof(maxLength));
+
+            int stringLength = value.Length;
+
+            if (stringLength < minLength && stringLength > maxLength)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentOutOfRangeException(paramName, $"The length must be in between {minLength} and {maxLength}.");
+                }
+
+                throw new ArgumentOutOfRangeException(paramName, message);
             }
 
             return value;
@@ -150,7 +187,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
-        public static Guid ThrowIfEmpty(this Guid value, string paramName, string message = null)
+        public static Guid ThrowIfEmpty([ValidatedNotNull] this Guid value, string paramName, string message = null)
         {
             if (value == Guid.Empty)
             {
