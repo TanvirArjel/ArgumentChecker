@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 
 namespace TanvirArjel.ArgumentChecker
 {
@@ -74,8 +75,10 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="paramName">The name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is empty.</exception>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="minLength"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="maxLength"/> is zero or negative.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified lengths.</exception>
         public static string ThrowIfOutOfLength(
             [ValidatedNotNull] this string value,
             int minLength,
@@ -100,6 +103,38 @@ namespace TanvirArjel.ArgumentChecker
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentException"/> if the <paramref name="value"/> is not a valid email address.
+        /// </summary>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">The name of the parameter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/> or empty.</exception>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is not a valid email address.</exception>
+        public static string ThrowIfNotValidEmail(
+            [ValidatedNotNull] this string value,
+            string paramName,
+            string message = null)
+        {
+            value.ThrowIfNullOrEmpty(paramName, message);
+
+            try
+            {
+                MailAddress mailAddress = new MailAddress(value);
+                return mailAddress.Address;
+            }
+            catch
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentException("The provied string is not a valid email address.", paramName);
+                }
+
+                throw new ArgumentException(message, paramName);
+            }
         }
 
         /// <summary>
