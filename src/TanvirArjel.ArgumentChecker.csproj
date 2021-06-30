@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageId>TanvirArjel.ArgumentChecker</PackageId>
@@ -15,7 +15,8 @@
 		<RepositoryUrl>https://github.com/TanvirArjel/ArgumentChecker</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<PackageReleaseNotes>1. ThrowIfOutOfLength extension method has been added.</PackageReleaseNotes>
+		<PackageReleaseNotes>1. ThrowIfNotValidEmail extension method for string has been added.
+2. Extension methods for Span&lt;T&gt; and ReadOnlySpan&lt;T&gt; have been added.</PackageReleaseNotes>
 		<PackageTags>C#, .NET, ArgumentGuard, ParamterGuard,ArgumentChecker,ParameterChecker</PackageTags>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageIconUrl />
@@ -32,6 +33,10 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+		<PackageReference Include="System.Memory" Version="4.5.4" />
 	</ItemGroup>
 
 	<ItemGroup>

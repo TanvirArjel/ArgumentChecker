@@ -19,7 +19,7 @@ namespace TanvirArjel.ArgumentChecker
         /// </summary>
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
@@ -44,7 +44,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
@@ -57,7 +57,7 @@ namespace TanvirArjel.ArgumentChecker
             {
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                    throw new ArgumentException("The value of paramter is empty.", paramName);
+                    throw new ArgumentException("The value of parameter is empty.", paramName);
                 }
 
                 throw new ArgumentNullException(paramName, message);
@@ -142,7 +142,7 @@ namespace TanvirArjel.ArgumentChecker
         /// </summary>
         /// <typeparam name="T">The tuype of the item of the collection.</typeparam>
         /// <param name="collection">The collection to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="collection"/> is <see langword="null"/>.</exception>
@@ -167,7 +167,7 @@ namespace TanvirArjel.ArgumentChecker
         /// </summary>
         /// <typeparam name="T">The type of the item of the collection.</typeparam>
         /// <param name="collection">The collection to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="collection"/> is <see langword="null"/>.</exception>
@@ -194,7 +194,7 @@ namespace TanvirArjel.ArgumentChecker
         /// </summary>
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
@@ -215,10 +215,114 @@ namespace TanvirArjel.ArgumentChecker
         }
 
         /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        public static Span<T> ThrowIfNull<T>([ValidatedNotNull] this Span<T> value, string paramName, string message = null)
+        {
+            if (value == null)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentNullException(paramName);
+                }
+
+                throw new ArgumentNullException(paramName, message);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/> and
+        /// <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
+        public static Span<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull] this Span<T> value, string paramName, string message = null)
+        {
+            value.ThrowIfNull(paramName, message);
+
+            if (value.Length == 0)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentException("The value of parameter is empty.", paramName);
+                }
+
+                throw new ArgumentException(paramName, message);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        public static ReadOnlySpan<T> ThrowIfNull<T>([ValidatedNotNull] this ReadOnlySpan<T> value, string paramName, string message = null)
+        {
+            if (value == null)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentNullException(paramName);
+                }
+
+                throw new ArgumentNullException(paramName, message);
+            }
+
+            return value;
+        }
+
+        /// <summary>
+        /// Throws <see cref="ArgumentNullException"/> if the <paramref name="value"/> is <see langword="null"/> and
+        /// <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
+        /// </summary>
+        /// <typeparam name="T">The type of the value.</typeparam>
+        /// <param name="value">The value to be checked.</param>
+        /// <param name="paramName">Name of the parameter.</param>
+        /// <param name="message">Exception message.</param>
+        /// <returns>The original value if check is passed.</returns>
+        /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
+        public static ReadOnlySpan<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull] this ReadOnlySpan<T> value, string paramName, string message = null)
+        {
+            value.ThrowIfNull(paramName, message);
+
+            if (value.Length == 0)
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                    throw new ArgumentException("The value of parameter is empty.", paramName);
+                }
+
+                throw new ArgumentException(paramName, message);
+            }
+
+            return value;
+        }
+
+        /// <summary>
         /// Throws <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentException">Throws if the <paramref name="value"/> is empty.</exception>
@@ -228,7 +332,7 @@ namespace TanvirArjel.ArgumentChecker
             {
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                    throw new ArgumentException("The value of paramter is empty", paramName);
+                    throw new ArgumentException("The value of parameter is empty.", paramName);
                 }
 
                 throw new ArgumentException(message, paramName);
@@ -242,7 +346,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <see cref="ArgumentException"/> if the <paramref name="value"/> is empty.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentNullException">Throws if the <paramref name="value"/> is <see langword="null"/>.</exception>
@@ -258,7 +362,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
@@ -271,7 +375,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
@@ -284,7 +388,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
@@ -297,7 +401,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
@@ -310,7 +414,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
@@ -323,7 +427,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
@@ -336,7 +440,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
@@ -349,7 +453,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
@@ -362,7 +466,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
@@ -375,7 +479,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
@@ -390,7 +494,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -405,7 +509,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -420,7 +524,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -435,7 +539,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -450,7 +554,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -465,7 +569,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -480,7 +584,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>
@@ -493,7 +597,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is zero or negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is zero or negative.</exception>
@@ -517,7 +621,7 @@ namespace TanvirArjel.ArgumentChecker
         /// Throws <see cref="ArgumentOutOfRangeException"/> if the <paramref name="value"/> is negative.
         /// </summary>
         /// <param name="value">The value to be checked.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is negative.</exception>
@@ -543,7 +647,7 @@ namespace TanvirArjel.ArgumentChecker
         /// <param name="value">The value to be checked.</param>
         /// <param name="min">The min value of the range.</param>
         /// <param name="max">The max value of the range.</param>
-        /// <param name="paramName">Name of the paramter.</param>
+        /// <param name="paramName">Name of the parameter.</param>
         /// <param name="message">Exception message.</param>
         /// <returns>The original value if check is passed.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <paramref name="value"/> is out of specified range.</exception>

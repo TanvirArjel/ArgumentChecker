@@ -23,6 +23,13 @@ namespace DemoApp.Controllers
             return View();
         }
 
+        public static string[] GetArray(Span<string> value)
+        {
+            value.ThrowIfNull(nameof(value));
+
+            return value.ToArray();
+        }
+
         public IActionResult Privacy()
         {
             return View();
