@@ -90,9 +90,14 @@ namespace TanvirArjel.ArgumentChecker
             minLength.ThrowIfZeroOrNegative(nameof(minLength));
             maxLength.ThrowIfZeroOrNegative(nameof(maxLength));
 
+            if (minLength > maxLength)
+            {
+                throw new ArgumentException($"The value of {nameof(minLength)} must be smaller than or equal to {nameof(maxLength)}");
+            }
+
             int stringLength = value.Length;
 
-            if (stringLength < minLength && stringLength > maxLength)
+            if (stringLength < minLength || stringLength > maxLength)
             {
                 if (string.IsNullOrWhiteSpace(message))
                 {

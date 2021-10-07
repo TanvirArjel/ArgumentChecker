@@ -18,6 +18,9 @@ namespace DemoApp.Controllers
 
         public IActionResult Index(Guid? input)
         {
+            string myName = "Tanvir";
+            myName.ThrowIfOutOfLength(7, 10, nameof(myName));
+
             input = Guid.Empty;
             input.ThrowIfNullOrEmpty(nameof(input));
             return View();
