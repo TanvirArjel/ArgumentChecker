@@ -15,12 +15,12 @@
 		<RepositoryUrl>https://github.com/TanvirArjel/ArgumentChecker</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<NeutralLanguage>en-US</NeutralLanguage>
-		<PackageReleaseNotes>1. ThrowIfOutOfLength method issue has been fixed.</PackageReleaseNotes>
+		<PackageReleaseNotes>1. Few more extension methods have been added.</PackageReleaseNotes>
 		<PackageTags>C#, .NET, ArgumentGuard, ParamterGuard,ArgumentChecker,ParameterChecker</PackageTags>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageIconUrl />
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<Version>1.2.1</Version>
+		<Version>1.3.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
