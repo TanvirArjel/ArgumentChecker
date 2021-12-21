@@ -49,7 +49,7 @@ namespace TanvirArjel.ArgumentChecker
                 return null;
             }
 
-            ((Guid)value).ThrowIfEmpty(paramName, message);
+            value.Value.ThrowIfEmpty(paramName, message);
             return value.Value;
         }
 
@@ -66,7 +66,7 @@ namespace TanvirArjel.ArgumentChecker
         public static Guid ThrowIfNullOrEmpty([ValidatedNotNull] this Guid? value, string paramName, string message = null)
         {
             value.ThrowIfNull(paramName, message);
-            ((Guid)value).ThrowIfEmpty(paramName, message);
+            value.Value.ThrowIfEmpty(paramName, message);
             return value.Value;
         }
     }
