@@ -46,6 +46,19 @@ namespace TanvirArjel.ArgumentChecker.Tests
         }
 
         [Fact]
+        public void ThrowIfOutOfLength_WithInValidRange_ThrowsArgumentException()
+        {
+            // Arrange
+            string argument = "TanvirArjel";
+
+            // Act
+            Action act = () => argument.ThrowIfOutOfLength(6, 2, nameof(argument));
+
+            // Assert
+            ArgumentException exception = Assert.Throws<ArgumentException>(act);
+        }
+
+        [Fact]
         public void ThrowIfOutOfLength_WithInValidValue_ThrowsArgumentOutOfRangeException()
         {
             // Arrange
@@ -65,10 +78,62 @@ namespace TanvirArjel.ArgumentChecker.Tests
             string argument = "Tanvir";
 
             // Act
-            string acutal = argument.ThrowIfOutOfLength(2, 6, nameof(argument));
+            string actual = argument.ThrowIfOutOfLength(2, 6, nameof(argument));
 
             // Assert
-            Assert.Equal(argument, acutal);
+            Assert.Equal(argument, actual);
+        }
+
+        [Fact]
+        public void ThrowIfExceedsLength_WithInValidValue_ThrowsArgumentOutOfRangeException()
+        {
+            // Arrange
+            string argument = "TanvirArjel";
+
+            // Act
+            Action act = () => argument.ThrowIfExceedsLength(6, nameof(argument));
+
+            // Assert
+            ArgumentOutOfRangeException exception = Assert.Throws<ArgumentOutOfRangeException>(act);
+        }
+
+        [Fact]
+        public void ThrowIfExceedsLength_WithValidValue_ReturnsValue()
+        {
+            // Arrange
+            string argument = "Tanvir";
+
+            // Act
+            string actual = argument.ThrowIfExceedsLength(6, nameof(argument));
+
+            // Assert
+            Assert.Equal(argument, actual);
+        }
+
+        [Fact]
+        public void ThrowIfNotValidEmail_WithInValidEmail_ThrowsArgumentException()
+        {
+            // Arrange
+            string argument = "tanvir";
+
+            // Act
+            Action action = () => argument.ThrowIfNotValidEmail(nameof(argument));
+
+            // Assert
+            Assert.Throws<ArgumentException>(action);
+        }
+
+        [Fact]
+        public void ThrowIfNotValidEmail_WithValidEmail_ReturnsValue()
+        {
+            // Arrange
+            string argument = "tanvir@gmail.com";
+
+            // Act
+            string actual = argument.ThrowIfNotValidEmail(nameof(argument));
+
+            // Assert
+            Assert.Equal(argument, actual);
         }
     }
 }
